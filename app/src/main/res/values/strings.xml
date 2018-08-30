@@ -1,0 +1,40 @@
+<resources>
+  <string name="app_name">Wallow</string>
+
+  <!--Settings-->
+  <string name="key_view_config" translatable="false">view_config</string>
+  <string name="title_view_config">Wallpaper Display Mode</string>
+  <string name="summary_view_config">Display mode for wallpaper (Grid or Linear)</string>
+
+  <string name="key_grid_count" translatable="false">grid_count</string>
+  <string name="title_grid_count">Grid Mode</string>
+  <string name="summary_grid_count">Choose a setting which comforts you</string>
+
+  <string name="key_wallpaper_download_location_mode" translatable="false">wall_download_location_mode</string>
+  <string name="title_wallpaper_download_location_mode">Categorised Downloads</string>
+  <string name="summary_wallpaper_download_location_mode">Download wallpapers in folders according to their categories</string>
+
+  <string name="key_dark_theme" translatable="false">dark_theme</string>
+  <string name="title_dark_theme">Dark Theme</string>
+  <string name="summary_dark_theme">Enable or disable dark theme</string>
+
+  <string name="key_primary_color" translatable="false">primary_color</string>
+  <string name="title_primary_color">Primary Color</string>
+  <string name="summary_primary_color">Choose a primary color</string>
+
+  <string name="key_accent_color" translatable="false">accent_color</string>
+  <string name="title_accent_color">Accent Color</string>
+  <string name="summary_accent_color">Choose an accent color</string>
+
+  <string name="category_title_theme">Theme</string>
+
+  <string name="category_title_view">View</string>
+
+  <string name="category_title_download">Download</string>
+
+  <!--About-->
+  <string name="app_description">Walls for friends</string>
+
+  <!-- TODO: Remove or change this placeholder text -->
+  <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

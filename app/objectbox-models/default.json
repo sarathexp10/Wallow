@@ -1,0 +1,70 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:6028668571689538619",
+      "lastPropertyId": "3:280454710342741397",
+      "name": "Category",
+      "properties": [
+        {
+          "id": "1:4404333164646688746",
+          "name": "id"
+        },
+        {
+          "id": "2:2909689511880317906",
+          "name": "name"
+        },
+        {
+          "id": "3:280454710342741397",
+          "name": "icon"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:7477713574563561696",
+      "lastPropertyId": "6:7054767967406868093",
+      "name": "Wallpaper",
+      "properties": [
+        {
+          "id": "1:466325340381649258",
+          "name": "id"
+        },
+        {
+          "id": "2:602145662721192335",
+          "name": "name"
+        },
+        {
+          "id": "3:1843468553470757679",
+          "name": "size"
+        },
+        {
+          "id": "4:174798374263414902",
+          "name": "categoryId"
+        },
+        {
+          "id": "5:6614891604300130209",
+          "name": "link"
+        },
+        {
+          "id": "6:7054767967406868093",
+          "name": "categoryName"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "2:7477713574563561696",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 4,
+  "modelVersionParserMinimum": 4,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

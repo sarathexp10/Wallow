@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <PreferenceCategory
+    android:title="@string/category_title_theme">
+
+    <ColorPickerPreference
+      android:defaultValue="@color/colorPrimary"
+      android:key="@string/key_primary_color"
+      android:summary="@string/summary_primary_color"
+      android:title="@string/title_primary_color"
+      app:pref_colors="@array/default_colors"
+      app:pref_currentColor="@color/colorPrimary"
+      app:pref_size="small"/>
+
+    <ColorPickerPreference
+      android:defaultValue="@color/colorAccent"
+      android:key="@string/key_accent_color"
+      android:summary="@string/summary_accent_color"
+      android:title="@string/title_accent_color"
+      app:pref_colors="@array/default_colors"
+      app:pref_currentColor="@color/colorPrimary"
+      app:pref_size="small"/>
+
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="@string/key_dark_theme"
+      android:summary="@string/summary_dark_theme"
+      android:title="@string/title_dark_theme"/>
+  </PreferenceCategory>
+  <PreferenceCategory
+    android:title="@string/category_title_view">
+
+    <DropDownPreference
+      android:entries="@array/view_config_titles"
+      android:entryValues="@array/view_config_values"
+      android:key="@string/key_view_config"
+      android:summary="@string/summary_view_config"
+      android:title="@string/title_view_config"/>
+
+    <DropDownPreference
+      android:entries="@array/grid_count_titles"
+      android:entryValues="@array/grid_count_values"
+      android:key="@string/key_grid_count"
+      android:summary="@string/summary_grid_count"
+      android:title="@string/title_grid_count"/>
+  </PreferenceCategory>
+
+  <PreferenceCategory
+    android:title="@string/category_title_download">
+
+    <SwitchPreference
+      android:key="@string/key_wallpaper_download_location_mode"
+      android:summary="@string/summary_wallpaper_download_location_mode"
+      android:title="@string/title_wallpaper_download_location_mode"/>
+  </PreferenceCategory>
+</PreferenceScreen>
