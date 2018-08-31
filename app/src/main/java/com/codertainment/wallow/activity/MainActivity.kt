@@ -5,9 +5,12 @@ import android.support.v4.app.Fragment
 import co.zsmb.materialdrawerkt.builders.drawer
 import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
 import co.zsmb.materialdrawerkt.draweritems.divider
+import com.codertainment.wallow.BuildConfig
 import com.codertainment.wallow.R
 import com.codertainment.wallow.fragment.AboutFragment
 import com.codertainment.wallow.fragment.WallpaperFragment
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.mcxiaoke.koi.ext.startActivity
 import com.mikepenz.google_material_typeface_library.GoogleMaterial
 import kotlinx.android.synthetic.main.activity_main.*
@@ -17,6 +20,11 @@ class MainActivity : BaseActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+
+    MobileAds.initialize(this, BuildConfig.ADMOB_APP_ID)
+
+    val adRequest = AdRequest.Builder().build()
+    adView.loadAd(adRequest)
 
     setSupportActionBar(main_toolbar)
 

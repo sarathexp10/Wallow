@@ -18,11 +18,14 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 import io.multimoon.colorful.Colorful
+import org.jetbrains.anko.runOnUiThread
 
 class AboutFragment : MaterialAboutFragment() {
   override fun getMaterialAboutList(p0: Context?): MaterialAboutList {
 
-    requireActivity().title = "About"
+    requireContext().runOnUiThread {
+      requireActivity().title = "About"
+    }
 
     val mal = MaterialAboutList.Builder()
 
