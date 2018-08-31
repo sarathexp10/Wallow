@@ -125,5 +125,12 @@ class AboutFragment : MaterialAboutFragment() {
 
   private fun getIconColor() = Colorful().getAccentColor().getColorPack().normal().asInt()
 
-  private fun getCard() = MaterialAboutCard.Builder().cardColor(Colorful().getPrimaryColor().getColorPack().normal().asInt())
+  private fun getCard() = MaterialAboutCard.Builder()
+
+  override fun getTheme() =
+      if (Colorful().getDarkTheme()) {
+        R.style.Theme_Mal_Dark_LightActionBar
+      } else {
+        R.style.Theme_Mal_Light_DarkActionBar
+      }
 }
