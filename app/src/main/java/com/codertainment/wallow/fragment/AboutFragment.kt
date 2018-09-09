@@ -100,26 +100,25 @@ class AboutFragment : MaterialAboutFragment() {
 
   private fun getDeveloperCard(name: String, role: String, githubUsername: String): MaterialAboutCard {
     val c = getCard()
-    val savio = MaterialAboutActionItem.Builder()
+    val dev = MaterialAboutActionItem.Builder()
         .text(name)
         .subText(role)
         .icon(getIcon(MaterialDesignIconic.Icon.gmi_account))
         .build()
-    c.addItem(savio)
-    val savioGithub = MaterialAboutActionItem.Builder()
+    c.addItem(dev)
+    val devGithub = MaterialAboutActionItem.Builder()
         .text("Fork on GitHub")
         .icon(getIcon(MaterialDesignIconic.Icon.gmi_github))
         .setOnClickAction {
           openGithub("https://github.com/$githubUsername")
         }
         .build()
-    c.addItem(savioGithub)
+    c.addItem(devGithub)
 
     return c.build()
   }
 
   private fun openGithub(link: String) = requireContext().startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
-
 
   private fun getIcon(iicon: IIcon) = IconicsDrawable(requireContext()).icon(iicon).color(getIconColor())
 
