@@ -3,8 +3,6 @@ package com.codertainment.wallow
 import android.app.Application
 import android.content.Context
 import android.graphics.Rect
-import android.support.v4.view.GravityCompat
-import android.support.v4.view.ViewCompat
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -33,7 +31,7 @@ class BaseApp : Application() {
   override fun onCreate() {
     super.onCreate()
     val defaults = Defaults(
-        primaryColor = ThemeColor.GREEN,
+        primaryColor = ThemeColor.GREY,
         accentColor = ThemeColor.AMBER,
         useDarkTheme = true,
         translucent = false)
@@ -82,24 +80,24 @@ fun View.enableToolTip(text: String) {
       getLocationOnScreen(screenPos)
       getWindowVisibleDisplayFrame(displayFrame)
 
-      val context = context
       val width = width
       val height = height
       val midy = screenPos[1] + height / 2
       var referenceX = screenPos[0] + width / 2
-      if (ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_LTR) {
+      val cheatSheet = Toast.makeText(context, text, Toast.LENGTH_SHORT)
+      cheatSheet.setGravity(Gravity.TOP or Gravity.START, referenceX, midy)
+      /*if (ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_LTR) {
         val screenWidth = context.resources.displayMetrics.widthPixels
         referenceX = screenWidth - referenceX // mirror
       }
       //TODO Set proper gravity below the view
-      val cheatSheet = Toast.makeText(context, text, Toast.LENGTH_SHORT)
       if (midy < displayFrame.height()) {
         // Show along the top; follow action buttons
         cheatSheet.setGravity(Gravity.TOP or GravityCompat.END, referenceX, height)
       } else {
         // Show along the bottom center
         cheatSheet.setGravity(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, 0, height)
-      }
+      }*/
       cheatSheet.show()
       true
     }

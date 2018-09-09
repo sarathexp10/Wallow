@@ -4,6 +4,7 @@ package com.codertainment.wallow.fragment
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.support.v7.app.AlertDialog
 import com.codertainment.wallow.R
 import com.danielstone.materialaboutlibrary.ConvenienceBuilder
 import com.danielstone.materialaboutlibrary.MaterialAboutFragment
@@ -18,7 +19,10 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 import io.multimoon.colorful.Colorful
+import org.jetbrains.anko.padding
 import org.jetbrains.anko.runOnUiThread
+import org.jetbrains.anko.support.v4.ctx
+import us.feras.mdv.MarkdownView
 
 class AboutFragment : MaterialAboutFragment() {
   override fun getMaterialAboutList(p0: Context?): MaterialAboutList {
@@ -47,6 +51,26 @@ class AboutFragment : MaterialAboutFragment() {
     )
     card1.addItem(version)
 
+    val markdownTheme = if (Colorful().getDarkTheme()) "file:///android_asset/dark.css" else "file:///android_asset/light.css"
+    val changelog = MaterialAboutActionItem.Builder()
+        .icon(getIcon(GoogleMaterial.Icon.gmd_history))
+        .text("Changelog")
+        .setOnClickAction {
+          ctx.runOnUiThread {
+            AlertDialog.Builder(ctx)
+                .setPositiveButton("Cool") { d, _ ->
+                  d.dismiss()
+                }
+                .setView(MarkdownView(ctx).apply {
+                  loadMarkdownFile("https://raw.githubusercontent.com/shripal17/Wallow/master/CHANGELOG.md", markdownTheme)
+                  padding = 16
+                })
+                .create()
+                .show()
+          }
+        }
+    card1.addItem(changelog.build())
+
     val t = if (Colorful().getDarkTheme()) Libs.ActivityStyle.DARK else Libs.ActivityStyle.LIGHT_DARK_TOOLBAR
     val licenses = MaterialAboutActionItem.Builder()
         .text("Open Source Licenses")
@@ -56,6 +80,7 @@ class AboutFragment : MaterialAboutFragment() {
               .withAboutIconShown(false)
               .withAboutVersionShown(false)
               .withAboutDescription("")
+              .withActivityTitle("Open Source Licenses")
               .withActivityStyle(t)
               .start(requireContext())
         }

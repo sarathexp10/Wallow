@@ -21,7 +21,7 @@
       android:summary="@string/summary_accent_color"
       android:title="@string/title_accent_color"
       app:pref_colors="@array/default_colors"
-      app:pref_currentColor="@color/colorPrimary"
+      app:pref_currentColor="@color/colorAccent"
       app:pref_size="small"/>
 
     <SwitchPreference

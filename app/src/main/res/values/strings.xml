@@ -33,8 +33,5 @@
   <string name="category_title_download">Download</string>
 
   <!--About-->
-  <string name="app_description">Walls for friends</string>
-
-  <!-- TODO: Remove or change this placeholder text -->
-  <string name="hello_blank_fragment">Hello blank fragment</string>
+  <string name="app_description">Walls for nerds</string>
 </resources>

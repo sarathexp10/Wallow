@@ -3,6 +3,7 @@ package com.codertainment.wallow.fragment
 import android.os.Bundle
 import android.os.Handler
 import android.support.v14.preference.SwitchPreference
+import android.support.v7.preference.DropDownPreference
 import android.support.v7.preference.Preference
 import com.codertainment.wallow.R
 import com.takisoft.fix.support.v7.preference.ColorPickerPreference
@@ -11,6 +12,13 @@ import io.multimoon.colorful.Colorful
 import io.multimoon.colorful.ThemeColor
 
 class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChangeListener {
+
+  lateinit var primaryColor: ColorPickerPreference
+  lateinit var accentColor: ColorPickerPreference
+  lateinit var darkTheme: SwitchPreference
+  lateinit var displayMode: DropDownPreference
+  lateinit var gridMode: DropDownPreference
+
   override fun onPreferenceChange(p0: Preference?, p1: Any?): Boolean {
     if (p0 != null && p1 != null) {
       if (p0.key == getString(R.string.key_primary_color) || p0.key == getString(R.string.key_accent_color) || p0.key == getString(R.string.key_dark_theme)) {
@@ -31,12 +39,8 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
     return true
   }
 
-  lateinit var primaryColor: ColorPickerPreference
-  lateinit var accentColor: ColorPickerPreference
-  lateinit var darkTheme: SwitchPreference
-
   var accentColorValue: Int = ThemeColor.AMBER.primaryStyle()
-  var primaryColorValue: Int = ThemeColor.GREEN.primaryStyle()
+  var primaryColorValue: Int = ThemeColor.GREY.primaryStyle()
   var isDarkTheme: Boolean = true
   lateinit var colors: IntArray
   val themes = arrayOf(ThemeColor.RED,
@@ -71,7 +75,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
     isDarkTheme = Colorful().getDarkTheme()
   }
 
-  fun bind() {
+  private fun bind() {
     primaryColor = findPreference(getString(R.string.key_primary_color)) as ColorPickerPreference
     primaryColor.onPreferenceChangeListener = this
 
@@ -80,9 +84,19 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
 
     darkTheme = findPreference(getString(R.string.key_dark_theme)) as SwitchPreference
     darkTheme.onPreferenceChangeListener = this
+
+    displayMode = findPreference(getString(R.string.key_view_config)) as DropDownPreference
+    gridMode = findPreference(getString(R.string.key_grid_count)) as DropDownPreference
+
+    displayMode.setOnPreferenceChangeListener { _, any ->
+      gridMode.isEnabled = any as String == "2"
+      true
+    }
+
+    gridMode.isEnabled = displayMode.value == "2"
   }
 
-  fun updateTheme() {
+  private fun updateTheme() {
     Colorful()
         .edit()
         .setPrimaryColor(themes[colors.indexOf(primaryColorValue)])
