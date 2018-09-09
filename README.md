@@ -2,7 +2,7 @@
 Wallpapers for nerds
 
 ## Changelog
-[CHANGELOG.md](/CHANGELOG/md)
+[CHANGELOG.md](/CHANGELOG.md)
 
 ## Building from source
 #### Requireiments
