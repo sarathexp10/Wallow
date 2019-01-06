@@ -3,6 +3,7 @@ package com.codertainment.wallow
 import android.app.Application
 import android.content.Context
 import android.graphics.Rect
+import android.support.v7.widget.TooltipCompat
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -74,32 +75,8 @@ fun View.enableToolTip(text: String) {
   if (oreoOrNewer()) {
     tooltipText = text
   } else {
-    this.setOnLongClickListener {
-      val screenPos = IntArray(2)
-      val displayFrame = Rect()
-      getLocationOnScreen(screenPos)
-      getWindowVisibleDisplayFrame(displayFrame)
-
-      val width = width
-      val height = height
-      val midy = screenPos[1] + height / 2
-      var referenceX = screenPos[0] + width / 2
-      val cheatSheet = Toast.makeText(context, text, Toast.LENGTH_SHORT)
-      cheatSheet.setGravity(Gravity.TOP or Gravity.START, referenceX, midy)
-      /*if (ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_LTR) {
-        val screenWidth = context.resources.displayMetrics.widthPixels
-        referenceX = screenWidth - referenceX // mirror
-      }
-      //TODO Set proper gravity below the view
-      if (midy < displayFrame.height()) {
-        // Show along the top; follow action buttons
-        cheatSheet.setGravity(Gravity.TOP or GravityCompat.END, referenceX, height)
-      } else {
-        // Show along the bottom center
-        cheatSheet.setGravity(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, 0, height)
-      }*/
-      cheatSheet.show()
-      true
-    }
+    TooltipCompat.setTooltipText(this, text)
   }
 }
+
+val BLUR_RADIUS = 10f

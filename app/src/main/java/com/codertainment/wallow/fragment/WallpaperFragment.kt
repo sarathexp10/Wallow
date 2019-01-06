@@ -14,7 +14,7 @@ import com.codertainment.wallow.getCategoryBox
 import com.codertainment.wallow.getWallpaperBox
 import com.codertainment.wallow.model.Wallpaper
 import com.codertainment.wallow.model.Wallpaper_
-import com.library.utils.PrefMan
+import com.codertainment.wallow.util.PrefMan
 import io.objectbox.kotlin.query
 import kotterknife.bindView
 
@@ -75,6 +75,9 @@ class WallpaperFragment : Fragment() {
     if (gridMode == VIEW_MODE_GRID) {
       gridCount = PrefMan.getInstance(requireContext()).getString(getString(R.string.key_grid_count), "3").toInt()
     }
+
+    wallRecycler.setHasFixedSize(true)
+    wallRecycler.isNestedScrollingEnabled = false
 
     if (gridCount > 1 && gridMode == VIEW_MODE_GRID) {
       wallRecycler.layoutManager = GridLayoutManager(requireContext(), gridCount)

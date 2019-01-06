@@ -4,14 +4,14 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="wrap_content"
+  android:layout_height="240dp"
   android:focusable="true"
   android:foreground="?attr/selectableItemBackground">
 
   <ImageView
     android:id="@+id/wall_image"
     android:layout_width="0dp"
-    android:layout_height="240dp"
+    android:layout_height="0dp"
     android:scaleType="centerCrop"
     android:transitionName="wallpaper"
     app:layout_constraintBottom_toBottomOf="parent"
@@ -19,74 +19,95 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     tools:srcCompat="@tools:sample/backgrounds/scenic"/>
-  <android.support.constraint.ConstraintLayout
-    android:id="@+id/wall_detail_container"
-    android:layout_width="0dp"
+
+  <eightbitlab.com.blurview.BlurView
+    android:id="@+id/blurView"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#a1000000"
+    app:blurOverlayColor="@color/overlayColor"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent">
+    <android.support.constraint.ConstraintLayout
+      android:id="@+id/wall_detail_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
 
-    <TextView
-      android:id="@+id/wall_name"
-      android:textStyle="bold"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
-      android:layout_marginStart="16dp"
-      android:layout_marginEnd="16dp"
-      android:textColor="@color/white"
-      android:textSize="14sp"
-      android:transitionName="title"
-      app:layout_constraintEnd_toStartOf="@+id/wall_apply"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      tools:text="@tools:sample/first_names"/>
-    <br.com.simplepass.loading_button_lib.customViews.CircularProgressImageButton
-      android:id="@+id/wall_download"
-      android:layout_width="24dp"
-      android:layout_height="24dp"
-      android:layout_marginTop="8dp"
-      android:layout_marginBottom="8dp"
-      android:layout_marginEnd="16dp"
-      android:background="@android:color/transparent"
-      android:src="@drawable/ic_download_white"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toStartOf="@id/wall_apply"
-      app:layout_constraintTop_toTopOf="parent"
-      app:spinning_bar_color="#FFF"
-      app:spinning_bar_padding="0dp"
-      app:spinning_bar_width="2dp"/>
-    <br.com.simplepass.loading_button_lib.customViews.CircularProgressImageButton
-      android:id="@+id/wall_apply"
-      android:layout_width="24dp"
-      android:layout_height="24dp"
-      android:layout_marginTop="8dp"
-      android:layout_marginBottom="8dp"
-      android:layout_marginEnd="16dp"
-      android:background="@android:color/transparent"
-      android:src="@drawable/ic_apply_wallpaper_white"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:spinning_bar_color="#FFF"
-      app:spinning_bar_padding="0dp"
-      app:spinning_bar_width="2dp"/>
-    <TextView
-      android:id="@+id/wall_category"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="4dp"
-      android:layout_marginBottom="8dp"
-      android:layout_marginStart="16dp"
-      android:layout_marginEnd="16dp"
-      android:textColor="@color/white"
-      android:textSize="12sp"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toStartOf="@+id/wall_apply"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/wall_name"
-      tools:text="@tools:sample/first_names"/>
-  </android.support.constraint.ConstraintLayout>
+      <TextView
+        android:id="@+id/wall_name"
+        android:textStyle="bold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:transitionName="title"
+        app:layout_constraintEnd_toStartOf="@+id/wall_apply"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@tools:sample/first_names"/>
+      <br.com.simplepass.loading_button_lib.customViews.CircularProgressImageButton
+        android:id="@+id/wall_download"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_download_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/wall_apply"
+        app:layout_constraintTop_toTopOf="parent"
+        app:spinning_bar_color="#FFF"
+        app:spinning_bar_padding="0dp"
+        app:spinning_bar_width="2dp"/>
+      <br.com.simplepass.loading_button_lib.customViews.CircularProgressImageButton
+        android:id="@+id/wall_apply"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_apply_wallpaper_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/wall_share"
+        app:layout_constraintTop_toTopOf="parent"
+        app:spinning_bar_color="#FFF"
+        app:spinning_bar_padding="0dp"
+        app:spinning_bar_width="2dp"/>
+      <br.com.simplepass.loading_button_lib.customViews.CircularProgressImageButton
+        android:id="@+id/wall_share"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:spinning_bar_color="#FFF"
+        app:spinning_bar_padding="0dp"
+        app:spinning_bar_width="2dp"
+        app:srcCompat="@drawable/ic_share_white"/>
+      <TextView
+        android:id="@+id/wall_category"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/wall_apply"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/wall_name"
+        tools:text="@tools:sample/first_names"/>
+    </android.support.constraint.ConstraintLayout>
+  </eightbitlab.com.blurview.BlurView>
 </android.support.constraint.ConstraintLayout>

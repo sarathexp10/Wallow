@@ -17,5 +17,5 @@ data class GitHubResponse(var name: String,
                           @SerializedName("download_url")
                           var downloadUrl: String,
                           var type: String) : Parcelable {
-  fun isWallpaper() = type == "file" && (name.endsWith("png") || name.endsWith("jpg"))
+  fun isWallpaper() = type == "file" && (name.endsWith("png") || name.endsWith("jpg") || name.endsWith("jpeg"))
 }

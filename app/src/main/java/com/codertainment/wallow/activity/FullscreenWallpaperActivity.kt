@@ -8,7 +8,6 @@ import android.graphics.Bitmap
 import android.graphics.Point
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.content.ContextCompat
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.util.Pair
@@ -25,17 +24,20 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.codertainment.wallow.BLUR_RADIUS
 import com.codertainment.wallow.R
 import com.codertainment.wallow.model.Wallpaper
 import com.codertainment.wallow.util.GlideApp
+import com.codertainment.wallow.util.UIUtils
 import com.codertainment.wallow.util.WallpaperUtil
-import com.library.utils.ui.UIUtils
 import com.mcxiaoke.koi.ext.delayed
 import com.mcxiaoke.koi.ext.toast
 import com.mcxiaoke.koi.log.logd
+import eightbitlab.com.blurview.RenderScriptBlur
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_fullscreen_wallpaper.*
+import org.jetbrains.anko.contentView
 import org.jetbrains.anko.find
 import java.util.concurrent.CancellationException
 
@@ -61,6 +63,7 @@ class FullscreenWallpaperActivity : BaseActivity() {
 
   var currentPosition = 0
   var walls: List<Wallpaper>? = null
+  var transitionCompleted = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -70,9 +73,11 @@ class FullscreenWallpaperActivity : BaseActivity() {
 
     setContentView(R.layout.activity_fullscreen_wallpaper)
 
+    supportPostponeEnterTransition()
+
     setSupportActionBar(full_toolbar)
-    full_toolbar.setTitle("")
-    full_toolbar.setSubtitle("")
+    full_toolbar.title = ""
+    full_toolbar.subtitle = ""
     supportActionBar!!.setDisplayShowTitleEnabled(false)
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     supportActionBar!!.setDisplayShowHomeEnabled(true)
@@ -86,7 +91,7 @@ class FullscreenWallpaperActivity : BaseActivity() {
       finish()
     }
 
-    full_detail_title.text = walls!![currentPosition].name
+    full_detail_title.text = walls!![currentPosition].nameWithoutExtension
     full_detail_category.text = walls!![currentPosition].categoryName
     full_detail_down_size.text = walls!![currentPosition].readableFileSize()
 
@@ -107,7 +112,9 @@ class FullscreenWallpaperActivity : BaseActivity() {
         full_detail_apply.resetProgress()
         full_detail_download.setImageResource(R.drawable.ic_download_white)
         full_detail_download.resetProgress()
-        full_detail_title.text = walls!![p0].name
+        full_detail_share.setImageResource(R.drawable.ic_share_white)
+        full_detail_share.resetProgress()
+        full_detail_title.text = walls!![p0].nameWithoutExtension
         full_detail_category.text = walls!![p0].categoryName
         full_detail_down_size.text = walls!![p0].readableFileSize()
       }
@@ -117,48 +124,59 @@ class FullscreenWallpaperActivity : BaseActivity() {
       page.scaleX = normalizedPosition / 2 + 0.5f
       page.scaleY = normalizedPosition / 2 + 0.5f
     }
-    full_toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.overlayColor))
 
     full_detail_apply.setOnClickListener {
       full_detail_apply.startAnimation()
       WallpaperUtil.apply(this@FullscreenWallpaperActivity, walls!![currentPosition],
-          {
-            full_detail_apply.revertAnimation {
-              full_detail_apply.setImageResource(R.drawable.ic_done_white)
-            }
-          },
-          {
-            full_detail_apply.revertAnimation()
-            if (!(it is CancellationException)) {
-              this@FullscreenWallpaperActivity.toast("Failed to apply wallpaper")
-            }
-          })
+                          {
+                            full_detail_apply.revertAnimation {
+                              full_detail_apply.setImageResource(R.drawable.ic_done_white)
+                            }
+                          },
+                          {
+                            full_detail_apply.revertAnimation()
+                            if (!(it is CancellationException)) {
+                              this@FullscreenWallpaperActivity.toast("Failed to apply wallpaper")
+                            }
+                          })
     }
 
     full_detail_download.setOnClickListener {
       full_detail_download.startAnimation()
       WallpaperUtil.download(this, walls!![currentPosition])
-          .subscribeOn(Schedulers.io())
-          .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(
-              {
-                full_detail_download.setProgress(it)
-              },
-              {
-                full_detail_download.revertAnimation()
-                this@FullscreenWallpaperActivity.toast("Failed to download wallpaper")
-              },
-              {
-                full_detail_download.revertAnimation {
-                  full_detail_download.setImageResource(R.drawable.ic_done_white)
-                }
-              }
-          )
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(
+          {
+            full_detail_download.setProgress(it)
+          },
+          {
+            full_detail_download.revertAnimation()
+            this@FullscreenWallpaperActivity.toast("Failed to download wallpaper")
+          },
+          {
+            full_detail_download.revertAnimation {
+              full_detail_download.setImageResource(R.drawable.ic_done_white)
+            }
+          }
+        )
     }
+
+    WallpaperUtil.setupShareButton(this, walls!![currentPosition], full_detail_share)
 
     if (!hasNavBar()) {
       guideline.setGuidelineEnd(0)
     }
+
+    full_detail_blur.setupWith(contentView as ViewGroup)
+      .setBlurAlgorithm(RenderScriptBlur(this))
+      .setBlurRadius(BLUR_RADIUS)
+      .setHasFixedTransformationMatrix(false)
+
+    full_detail_toolbar_blur.setupWith(contentView as ViewGroup)
+      .setBlurAlgorithm(RenderScriptBlur(this))
+      .setBlurRadius(BLUR_RADIUS)
+      .setHasFixedTransformationMatrix(false)
 
     Handler().delayed(1500) {
       hidePanels()
@@ -188,22 +206,22 @@ class FullscreenWallpaperActivity : BaseActivity() {
   }
 
   fun hidePanels() {
-    full_toolbar
-        .animate()
-        .translationY(-full_toolbar.height.toFloat())
-        .setListener(object : Animator.AnimatorListener {
-          override fun onAnimationRepeat(p0: Animator?) {}
+    full_detail_toolbar_blur
+      .animate()
+      .translationY(-full_toolbar.height.toFloat())
+      .setListener(object : Animator.AnimatorListener {
+        override fun onAnimationRepeat(p0: Animator?) {}
 
-          override fun onAnimationEnd(p0: Animator?) {
-            full_toolbar.visibility = View.GONE
-          }
+        override fun onAnimationEnd(p0: Animator?) {
+          full_detail_toolbar_blur.visibility = View.GONE
+        }
 
-          override fun onAnimationCancel(p0: Animator?) {}
+        override fun onAnimationCancel(p0: Animator?) {}
 
-          override fun onAnimationStart(p0: Animator?) {}
-        })
-    wallpaper_bottom_container.hide()
-    window.decorView.systemUiVisibility =  (View.SYSTEM_UI_FLAG_IMMERSIVE
+        override fun onAnimationStart(p0: Animator?) {}
+      })
+    full_detail_blur.hide()
+    window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
         // Set the content to appear under the system bars so that the
         // content doesn't resize when the system bars hide and show.
         or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -215,55 +233,56 @@ class FullscreenWallpaperActivity : BaseActivity() {
   }
 
   fun showPanels() {
-    full_toolbar.visibility = View.VISIBLE
-    full_toolbar.animate()
-        .translationY(0f)
-        .setListener(object : Animator.AnimatorListener {
-          override fun onAnimationRepeat(p0: Animator?) {}
+    full_detail_toolbar_blur.visibility = View.VISIBLE
+    full_detail_toolbar_blur.animate()
+      .translationY(0f)
+      .setListener(object : Animator.AnimatorListener {
+        override fun onAnimationRepeat(p0: Animator?) {}
 
-          override fun onAnimationEnd(p0: Animator?) {
-            full_toolbar.visibility = View.VISIBLE
-          }
+        override fun onAnimationEnd(p0: Animator?) {
+          full_detail_toolbar_blur.visibility = View.VISIBLE
+        }
 
-          override fun onAnimationCancel(p0: Animator?) {}
+        override fun onAnimationCancel(p0: Animator?) {}
 
-          override fun onAnimationStart(p0: Animator?) {}
-        })
-    wallpaper_bottom_container.show()
-    window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        override fun onAnimationStart(p0: Animator?) {}
+      })
+    full_detail_blur.show()
+    window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
   }
 
   fun View.hide() {
     animate()
-        .translationY(height.toFloat())
-        .setListener(object : Animator.AnimatorListener {
-          override fun onAnimationRepeat(p0: Animator?) {}
+      .translationY(height.toFloat())
+      .setListener(object : Animator.AnimatorListener {
+        override fun onAnimationRepeat(p0: Animator?) {}
 
-          override fun onAnimationEnd(p0: Animator?) {
-            visibility = View.GONE
-          }
+        override fun onAnimationEnd(p0: Animator?) {
+          visibility = View.GONE
+        }
 
-          override fun onAnimationCancel(p0: Animator?) {}
+        override fun onAnimationCancel(p0: Animator?) {}
 
-          override fun onAnimationStart(p0: Animator?) {}
-        })
+        override fun onAnimationStart(p0: Animator?) {}
+      })
   }
 
   fun View.show() {
     visibility = View.VISIBLE
     animate()
-        .translationY(0f)
-        .setListener(object : Animator.AnimatorListener {
-          override fun onAnimationRepeat(p0: Animator?) {}
+      .translationY(0f)
+      .setListener(object : Animator.AnimatorListener {
+        override fun onAnimationRepeat(p0: Animator?) {}
 
-          override fun onAnimationEnd(p0: Animator?) {
-            visibility = View.VISIBLE
-          }
+        override fun onAnimationEnd(p0: Animator?) {
+          visibility = View.VISIBLE
+        }
 
-          override fun onAnimationCancel(p0: Animator?) {}
+        override fun onAnimationCancel(p0: Animator?) {}
 
-          override fun onAnimationStart(p0: Animator?) {}
-        })
+        override fun onAnimationStart(p0: Animator?) {}
+      })
   }
 
   inner class WallpaperPagerAdapter(val walls: List<Wallpaper>) : PagerAdapter() {
@@ -276,26 +295,34 @@ class FullscreenWallpaperActivity : BaseActivity() {
       val ro = RequestOptions().format(DecodeFormat.PREFER_ARGB_8888)
 
       GlideApp.with(this@FullscreenWallpaperActivity)
-          .asBitmap()
-          .listener(object : RequestListener<Bitmap> {
-            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Bitmap>?, isFirstResource: Boolean): Boolean {
-              img.setImageResource(R.drawable.ic_dialog_error)
-              return false
+        .asBitmap()
+        .listener(object : RequestListener<Bitmap> {
+          override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Bitmap>?, isFirstResource: Boolean): Boolean {
+            img.setImageResource(R.drawable.ic_error_dark)
+            if (!transitionCompleted) {
+              supportStartPostponedEnterTransition()
+              transitionCompleted = true
             }
+            return false
+          }
 
-            override fun onResourceReady(resource: Bitmap?, model: Any?, target: Target<Bitmap>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-              progress.visibility = View.GONE
-              img.setImageBitmap(resource)
-              return false
+          override fun onResourceReady(resource: Bitmap?, model: Any?, target: Target<Bitmap>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+            progress.visibility = View.GONE
+            img.setImageBitmap(resource)
+            if (!transitionCompleted) {
+              startPostponedEnterTransition()
+              transitionCompleted = true
             }
-          })
-          .load(walls[position].link)
-          .apply(ro)
-          .dontAnimate()
-          .into(img)
+            return false
+          }
+        })
+        .load(walls[position].link)
+        .apply(ro)
+        .dontAnimate()
+        .into(img)
 
       img.setOnClickListener {
-        if (wallpaper_bottom_container.visibility == View.GONE) {
+        if (full_detail_blur.visibility == View.GONE) {
           showPanels()
         } else {
           hidePanels()

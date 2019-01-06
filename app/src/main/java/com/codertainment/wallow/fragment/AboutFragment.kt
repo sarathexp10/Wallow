@@ -36,63 +36,69 @@ class AboutFragment : MaterialAboutFragment() {
     val card1 = getCard()
 
     val title = MaterialAboutTitleItem.Builder()
-        .text(R.string.app_name)
-        .desc(R.string.app_description)
-        .icon(R.mipmap.ic_launcher)
-        .build()
+      .text(R.string.app_name)
+      .desc(R.string.app_description)
+      .icon(R.mipmap.ic_launcher)
+      .build()
 
     card1.addItem(title)
 
     val version = ConvenienceBuilder.createVersionActionItem(
-        requireContext(),
-        getIcon(GoogleMaterial.Icon.gmd_info_outline),
-        "Version",
-        true
+      requireContext(),
+      getIcon(GoogleMaterial.Icon.gmd_info_outline),
+      "Version",
+      true
     )
     card1.addItem(version)
 
     val markdownTheme = if (Colorful().getDarkTheme()) "file:///android_asset/dark.css" else "file:///android_asset/light.css"
     val changelog = MaterialAboutActionItem.Builder()
-        .icon(getIcon(GoogleMaterial.Icon.gmd_history))
-        .text("Changelog")
-        .setOnClickAction {
-          ctx.runOnUiThread {
-            AlertDialog.Builder(ctx)
-                .setPositiveButton("Cool") { d, _ ->
-                  d.dismiss()
-                }
-                .setView(MarkdownView(ctx).apply {
-                  loadMarkdownFile("https://raw.githubusercontent.com/shripal17/Wallow/master/CHANGELOG.md", markdownTheme)
-                  padding = 16
-                })
-                .create()
-                .show()
-          }
+      .icon(getIcon(GoogleMaterial.Icon.gmd_history))
+      .text("Changelog")
+      .setOnClickAction {
+        ctx.runOnUiThread {
+          AlertDialog.Builder(ctx)
+            .setPositiveButton("Cool") { d, _ ->
+              d.dismiss()
+            }
+            .setView(MarkdownView(ctx).apply {
+              loadMarkdownFile("https://raw.githubusercontent.com/shripal17/Wallow/master/CHANGELOG.md", markdownTheme)
+              padding = 16
+            })
+            .create()
+            .show()
         }
+      }
     card1.addItem(changelog.build())
 
     val t = if (Colorful().getDarkTheme()) Libs.ActivityStyle.DARK else Libs.ActivityStyle.LIGHT_DARK_TOOLBAR
     val licenses = MaterialAboutActionItem.Builder()
-        .text("Open Source Licenses")
-        .icon(getIcon(GoogleMaterial.Icon.gmd_book))
-        .setOnClickAction {
-          LibsBuilder()
-              .withAboutIconShown(false)
-              .withAboutVersionShown(false)
-              .withAboutDescription("")
-              .withActivityTitle("Open Source Licenses")
-              .withActivityStyle(t)
-              .start(requireContext())
-        }
-        .build()
+      .text("Open Source Licenses")
+      .icon(getIcon(GoogleMaterial.Icon.gmd_book))
+      .setOnClickAction {
+        LibsBuilder()
+          .withAboutIconShown(false)
+          .withAboutVersionShown(false)
+          .withAboutDescription("")
+          .withActivityTitle("Open Source Licenses")
+          .withActivityStyle(t)
+          .start(requireContext())
+      }
+      .build()
     card1.addItem(licenses)
 
     mal.addCard(card1.build())
 
+    val people = getCard().apply {
+      title("People")
+      addItem(getPerson("Savio Perera", "Lead Wallpaper Designer", "Wizper99"))
+      addItem(getPerson("Sarath EXP", "Wallpaper Designer"))
+      addItem(getPerson("Biplov Biswas", "Wallpaper Designer"))
+      addItem(getPerson("Rahul Ahuja", "Wallpaper Designer"))
+      addItem(getPerson("Shripal jain", "App Developer", "shripal17"))
+    }
 
-    mal.addCard(getDeveloperCard("Savio Perera", "Lead Wallpaper Designer", "Wizper99"))
-    mal.addCard(getDeveloperCard("Shripal Jain", "App Developer", "shripal17"))
-
+    mal.addCard(people.build())
 
     val card2 = getCard()
 
@@ -101,21 +107,21 @@ class AboutFragment : MaterialAboutFragment() {
 
 
     val wallSource = MaterialAboutActionItem.Builder()
-        .text("View wallpapers source or contribute")
-        .icon(getIcon(MaterialDesignIconic.Icon.gmi_github))
-        .setOnClickAction {
-          openGithub("https://github.com/Wizper99/Wallpapers")
-        }
-        .build()
+      .text("View wallpapers source or contribute")
+      .icon(getIcon(MaterialDesignIconic.Icon.gmi_github))
+      .setOnClickAction {
+        openGithub("https://github.com/Wizper99/Wallpapers")
+      }
+      .build()
     card2.addItem(wallSource)
 
     val source = MaterialAboutActionItem.Builder()
-        .text("View app source or contribute")
-        .icon(getIcon(MaterialDesignIconic.Icon.gmi_github))
-        .setOnClickAction {
-          openGithub("https://github.com/shripal17/Wallow")
-        }
-        .build()
+      .text("View app source or contribute")
+      .icon(getIcon(MaterialDesignIconic.Icon.gmi_github))
+      .setOnClickAction {
+        openGithub("https://github.com/shripal17/Wallow")
+      }
+      .build()
     card2.addItem(source)
 
     mal.addCard(card2.build())
@@ -123,21 +129,32 @@ class AboutFragment : MaterialAboutFragment() {
     return mal.build()
   }
 
+  private fun getPerson(name: String, role: String, githubUsername: String? = null) = MaterialAboutActionItem.Builder().apply {
+    text(name)
+    subText(role)
+    icon(getIcon(MaterialDesignIconic.Icon.gmi_account))
+    if (githubUsername != null && githubUsername.isNotEmpty()) {
+      setOnClickAction {
+        openGithub("https://github.com/$githubUsername")
+      }
+    }
+  }.build()
+
   private fun getDeveloperCard(name: String, role: String, githubUsername: String): MaterialAboutCard {
     val c = getCard()
     val dev = MaterialAboutActionItem.Builder()
-        .text(name)
-        .subText(role)
-        .icon(getIcon(MaterialDesignIconic.Icon.gmi_account))
-        .build()
+      .text(name)
+      .subText(role)
+      .icon(getIcon(MaterialDesignIconic.Icon.gmi_account))
+      .build()
     c.addItem(dev)
     val devGithub = MaterialAboutActionItem.Builder()
-        .text("Fork on GitHub")
-        .icon(getIcon(MaterialDesignIconic.Icon.gmi_github))
-        .setOnClickAction {
-          openGithub("https://github.com/$githubUsername")
-        }
-        .build()
+      .text("Fork on GitHub")
+      .icon(getIcon(MaterialDesignIconic.Icon.gmi_github))
+      .setOnClickAction {
+        openGithub("https://github.com/$githubUsername")
+      }
+      .build()
     c.addItem(devGithub)
 
     return c.build()
@@ -152,9 +169,9 @@ class AboutFragment : MaterialAboutFragment() {
   private fun getCard() = MaterialAboutCard.Builder()
 
   override fun getTheme() =
-      if (Colorful().getDarkTheme()) {
-        R.style.Theme_Mal_Dark_LightActionBar
-      } else {
-        R.style.Theme_Mal_Light_DarkActionBar
-      }
+    if (Colorful().getDarkTheme()) {
+      R.style.Theme_Mal_Dark_LightActionBar
+    } else {
+      R.style.Theme_Mal_Light_DarkActionBar
+    }
 }

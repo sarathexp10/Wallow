@@ -11,7 +11,7 @@ import com.codertainment.wallow.getWallpaperBox
 import com.codertainment.wallow.model.Category
 import com.codertainment.wallow.model.Wallpaper
 import com.codertainment.wallow.util.ApiService
-import com.library.utils.ui.UIUtils
+import com.codertainment.wallow.util.UIUtils
 import com.mcxiaoke.koi.ext.delayed
 import com.mcxiaoke.koi.ext.isConnected
 import com.mcxiaoke.koi.ext.startActivity

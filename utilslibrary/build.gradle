@@ -35,11 +35,5 @@ dependencies {
     api 'com.ndroid.nadim:cool-toast:1.0'
     api 'com.google.code.gson:gson:2.8.4'
     api 'com.github.clans:fab:1.6.4'
-    api('io.nlopez.smartlocation:library:+') {
-        transitive = false
-    }
-    api "com.google.android.gms:play-services-location:$googleServicesVersion"
-    api "com.google.android.gms:play-services-maps:$googleServicesVersion"
     api 'dev.dworks.libs:volleyplus:+'
-    api "org.jetbrains.anko:anko:0.10.5"
 }

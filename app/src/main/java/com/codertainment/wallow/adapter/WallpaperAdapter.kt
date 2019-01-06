@@ -1,5 +1,6 @@
 package com.codertainment.wallow.adapter
 
+import android.support.constraint.ConstraintLayout
 import android.support.design.widget.Snackbar
 import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.RecyclerView
@@ -9,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressImageButton
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.codertainment.wallow.BLUR_RADIUS
 import com.codertainment.wallow.R
 import com.codertainment.wallow.activity.FullscreenWallpaperActivity
 import com.codertainment.wallow.enableToolTip
@@ -16,14 +19,23 @@ import com.codertainment.wallow.model.Wallpaper
 import com.codertainment.wallow.util.GlideApp
 import com.codertainment.wallow.util.WallpaperUtil
 import com.mcxiaoke.koi.ext.toast
+import eightbitlab.com.blurview.BlurView
+import eightbitlab.com.blurview.RenderScriptBlur
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
 import java.util.concurrent.CancellationException
 
-class WallpaperAdapter(val ctx: FragmentActivity, val data: List<Wallpaper>, var showCategory: Boolean = true, var hideButtons: Boolean = false, val animate: Boolean = true) : RecyclerView.Adapter<WallpaperAdapter.WallpaperViewHolder>() {
+class WallpaperAdapter(
+  val ctx: FragmentActivity,
+  val data: List<Wallpaper>,
+  var showCategory: Boolean = true,
+  var hideButtons: Boolean = false,
+  val animate: Boolean = true
+) : RecyclerView.Adapter<WallpaperAdapter.WallpaperViewHolder>() {
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = WallpaperViewHolder(LayoutInflater.from(ctx).inflate(R.layout.item_wallpaper, parent, false))
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+    WallpaperViewHolder(LayoutInflater.from(ctx).inflate(R.layout.item_wallpaper, parent, false))
 
   override fun getItemCount() = data.size
 
@@ -36,61 +48,85 @@ class WallpaperAdapter(val ctx: FragmentActivity, val data: List<Wallpaper>, var
 
     val download by bindView<CircularProgressImageButton>(R.id.wall_download)
     val apply by bindView<CircularProgressImageButton>(R.id.wall_apply)
+    val share by bindView<CircularProgressImageButton>(R.id.wall_share)
     val image by bindView<ImageView>(R.id.wall_image)
+    val blurView by bindView<BlurView>(R.id.blurView)
+    val detailContainer by bindView<ConstraintLayout>(R.id.wall_detail_container)
 
     fun bind(item: Wallpaper) {
-      name.setText(item.name)
-      GlideApp.with(ctx).load(item.link).into(image)
-      if (showCategory) {
-        category.setText(item.categoryName)
+      name.text = item.nameWithoutExtension
+      GlideApp.with(ctx)
+        .load(item.link)
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .error(R.drawable.ic_error_white)
+        .into(image)
+
+      category.text = if (showCategory) {
+        item.categoryName
       } else {
-        category.setText(item.readableFileSize())
+        item.readableFileSize()
       }
+
       if (!hideButtons) {
+        download.visibility = View.VISIBLE
+        apply.visibility = View.VISIBLE
+        share.visibility = View.VISIBLE
+
         download.setOnClickListener {
           download.startAnimation()
           WallpaperUtil.download(ctx, item)
-              .subscribeOn(Schedulers.io())
-              .observeOn(AndroidSchedulers.mainThread())
-              .subscribe(
-                  {
-                    download.setProgress(it)
-                  },
-                  {
-                    download.revertAnimation()
-                    ctx.toast("Failed to download wallpaper")
-                  },
-                  {
-                    download.revertAnimation {
-                      download.setImageResource(R.drawable.ic_done_white)
-                    }
-                    Snackbar.make(ctx.findViewById(R.id.main), "Wallpaper Downloaded to ${ctx.getString(R.string.app_name)}/Download", Snackbar.LENGTH_SHORT).show()
-                  }
-              )
-        }
-        apply.setOnClickListener {
-          apply.startAnimation()
-          WallpaperUtil.apply(ctx, item,
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
               {
-                apply.revertAnimation {
-                  apply.setImageResource(R.drawable.ic_done_white)
-                }
-                Snackbar.make(ctx.findViewById(R.id.main), "Wallpaper Applied", Snackbar.LENGTH_SHORT).show()
+                download.setProgress(it)
               },
               {
-                apply.revertAnimation()
-                if (!(it is CancellationException)) {
-                  ctx.toast("Failed to apply wallpaper")
+                download.revertAnimation()
+                ctx.toast("Failed to download wallpaper")
+              },
+              {
+                download.revertAnimation {
+                  download.setImageResource(R.drawable.ic_done_white)
                 }
-              })
+                Snackbar.make(ctx.findViewById(R.id.main), "Wallpaper Downloaded to ${ctx.getString(R.string.app_name)}/Download", Snackbar.LENGTH_SHORT).show()
+              }
+            )
         }
+
+        apply.setOnClickListener {
+          apply.startAnimation()
+          WallpaperUtil.apply(
+            ctx, item,
+            {
+              apply.revertAnimation {
+                apply.setImageResource(R.drawable.ic_done_white)
+              }
+              Snackbar.make(ctx.findViewById(R.id.main), "Wallpaper Applied", Snackbar.LENGTH_SHORT).show()
+            },
+            {
+              apply.revertAnimation()
+              if (!(it is CancellationException)) {
+                ctx.toast("Failed to apply wallpaper")
+              }
+            })
+        }
+
+        WallpaperUtil.setupShareButton(ctx, item, share)
 
         download.enableToolTip("Download")
         apply.enableToolTip("Apply Wallpaper")
+        share.enableToolTip("Share")
       } else {
         download.visibility = View.GONE
         apply.visibility = View.GONE
+        share.visibility = View.GONE
       }
+
+      blurView.setupWith(v as ViewGroup)
+        .setBlurAlgorithm(RenderScriptBlur(ctx))
+        .setBlurRadius(BLUR_RADIUS)
+        .setHasFixedTransformationMatrix(true)
 
       v.setOnClickListener {
         FullscreenWallpaperActivity.openWall(ctx, image, name, adapterPosition, ArrayList(data), animate)
