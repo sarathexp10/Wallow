@@ -16,7 +16,8 @@ data class Wallpaper(
   var size: Long = 0,
   var categoryId: Long = 0,
   var categoryName: String = "",
-  var link: String = "0"
+  var link: String = "0",
+  var featured: Boolean = false
 ) : Parcelable {
 
   fun readableFileSize() =

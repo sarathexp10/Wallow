@@ -3,7 +3,7 @@ package com.codertainment.wallow
 import android.app.Application
 import android.content.Context
 import android.graphics.Rect
-import android.support.v7.widget.TooltipCompat
+import androidx.appcompat.widget.TooltipCompat
 import android.util.Log
 import android.view.Gravity
 import android.view.View

@@ -6,10 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Environment
-import android.support.v4.app.FragmentActivity
-import android.support.v4.content.FileProvider
-import android.support.v7.app.AlertDialog
-import android.support.v7.graphics.Palette
+import androidx.fragment.app.FragmentActivity
+import androidx.core.content.FileProvider
+import androidx.appcompat.app.AlertDialog
+import androidx.palette.graphics.Palette
 import android.webkit.MimeTypeMap
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressImageButton
 import com.androidnetworking.AndroidNetworking

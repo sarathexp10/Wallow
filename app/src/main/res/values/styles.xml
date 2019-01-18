@@ -15,13 +15,6 @@
     <item name="android:windowBackground">@drawable/splash</item>
   </style>
 
-  <style name="PreferenceTheme" parent="@style/PreferenceFixTheme.MaterialComponents.Light.NoActionBar">
-    <item name="colorAccent">@color/colorAccent</item>
-    <item name="colorPrimary">@color/colorPrimary</item>
-    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-  </style>
-
-
   <style name="MaterialDrawerLight" parent="Theme.MaterialComponents.Light.NoActionBar">
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>

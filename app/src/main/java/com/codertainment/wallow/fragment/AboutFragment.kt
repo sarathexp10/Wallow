@@ -4,7 +4,7 @@ package com.codertainment.wallow.fragment
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import com.codertainment.wallow.R
 import com.danielstone.materialaboutlibrary.ConvenienceBuilder
 import com.danielstone.materialaboutlibrary.MaterialAboutFragment
@@ -95,7 +95,7 @@ class AboutFragment : MaterialAboutFragment() {
       addItem(getPerson("Sarath EXP", "Wallpaper Designer"))
       addItem(getPerson("Biplov Biswas", "Wallpaper Designer"))
       addItem(getPerson("Rahul Ahuja", "Wallpaper Designer"))
-      addItem(getPerson("Shripal jain", "App Developer", "shripal17"))
+      addItem(getPerson("Shripal Jain", "App Developer", "shripal17"))
     }
 
     mal.addCard(people.build())

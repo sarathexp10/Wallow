@@ -8,8 +8,8 @@ import android.graphics.Bitmap
 import android.graphics.Point
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.view.PagerAdapter
-import android.support.v4.view.ViewPager
+import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager.widget.ViewPager
 import android.util.Pair
 import android.view.Surface
 import android.view.View
@@ -135,7 +135,7 @@ class FullscreenWallpaperActivity : BaseActivity() {
                           },
                           {
                             full_detail_apply.revertAnimation()
-                            if (!(it is CancellationException)) {
+                            if (it !is CancellationException) {
                               this@FullscreenWallpaperActivity.toast("Failed to apply wallpaper")
                             }
                           })
@@ -285,7 +285,7 @@ class FullscreenWallpaperActivity : BaseActivity() {
       })
   }
 
-  inner class WallpaperPagerAdapter(val walls: List<Wallpaper>) : PagerAdapter() {
+  inner class WallpaperPagerAdapter(val walls: List<Wallpaper>) : androidx.viewpager.widget.PagerAdapter() {
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
       val layout = layoutInflater.inflate(R.layout.wallpaper, container, false)

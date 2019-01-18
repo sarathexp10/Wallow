@@ -25,7 +25,7 @@
     },
     {
       "id": "2:7477713574563561696",
-      "lastPropertyId": "6:7054767967406868093",
+      "lastPropertyId": "8:4878297070988204827",
       "name": "Wallpaper",
       "properties": [
         {
@@ -51,6 +51,10 @@
         {
           "id": "6:7054767967406868093",
           "name": "categoryName"
+        },
+        {
+          "id": "8:4878297070988204827",
+          "name": "featured"
         }
       ],
       "relations": []
@@ -64,7 +68,9 @@
   "modelVersionParserMinimum": 4,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    8678309946357143523
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

@@ -2,7 +2,7 @@ package com.codertainment.wallow.activity
 
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import co.zsmb.materialdrawerkt.builders.drawer
 import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
 import co.zsmb.materialdrawerkt.draweritems.divider
@@ -35,12 +35,12 @@ class MainActivity : BaseActivity() {
 
     setSupportActionBar(main_toolbar)
 
-    title = "Home"
+    title = "Featured"
 
     drawer {
       toolbar = main_toolbar
 
-      primaryItem("Home") {
+      primaryItem("Featured") {
         iicon = GoogleMaterial.Icon.gmd_home
         onClick { _ ->
           loadCategory(0L)
@@ -117,7 +117,7 @@ class MainActivity : BaseActivity() {
     loadCategory(0)
   }
 
-  private fun loadCategory(id: Long, title: String = "Home") {
+  private fun loadCategory(id: Long, title: String = "Featured") {
     val wallFrag = WallpaperFragment()
     val bundle = Bundle()
     bundle.putLong(WallpaperFragment.CATEGORY_ID, id)

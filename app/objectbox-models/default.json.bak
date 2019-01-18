@@ -25,7 +25,7 @@
     },
     {
       "id": "2:7477713574563561696",
-      "lastPropertyId": "5:6614891604300130209",
+      "lastPropertyId": "7:8678309946357143523",
       "name": "Wallpaper",
       "properties": [
         {
@@ -47,6 +47,14 @@
         {
           "id": "5:6614891604300130209",
           "name": "link"
+        },
+        {
+          "id": "6:7054767967406868093",
+          "name": "categoryName"
+        },
+        {
+          "id": "7:8678309946357143523",
+          "name": "isFeatured"
         }
       ],
       "relations": []

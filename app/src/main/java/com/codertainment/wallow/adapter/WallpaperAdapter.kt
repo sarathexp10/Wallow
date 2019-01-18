@@ -1,9 +1,9 @@
 package com.codertainment.wallow.adapter
 
-import android.support.constraint.ConstraintLayout
-import android.support.design.widget.Snackbar
-import android.support.v4.app.FragmentActivity
-import android.support.v7.widget.RecyclerView
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.android.material.snackbar.Snackbar
+import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,12 +19,14 @@ import com.codertainment.wallow.model.Wallpaper
 import com.codertainment.wallow.util.GlideApp
 import com.codertainment.wallow.util.WallpaperUtil
 import com.mcxiaoke.koi.ext.toast
+import com.mcxiaoke.koi.log.logd
 import eightbitlab.com.blurview.BlurView
 import eightbitlab.com.blurview.RenderScriptBlur
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
 import java.util.concurrent.CancellationException
+import kotlin.system.measureTimeMillis
 
 class WallpaperAdapter(
   val ctx: FragmentActivity,
@@ -52,6 +54,10 @@ class WallpaperAdapter(
     val image by bindView<ImageView>(R.id.wall_image)
     val blurView by bindView<BlurView>(R.id.blurView)
     val detailContainer by bindView<ConstraintLayout>(R.id.wall_detail_container)
+
+    init {
+      setIsRecyclable(true)
+    }
 
     fun bind(item: Wallpaper) {
       name.text = item.nameWithoutExtension
@@ -123,10 +129,12 @@ class WallpaperAdapter(
         share.visibility = View.GONE
       }
 
-      blurView.setupWith(v as ViewGroup)
-        .setBlurAlgorithm(RenderScriptBlur(ctx))
-        .setBlurRadius(BLUR_RADIUS)
-        .setHasFixedTransformationMatrix(true)
+      logd("blur time $adapterPosition", measureTimeMillis {
+        blurView.setupWith(v as ViewGroup)
+          .setBlurAlgorithm(RenderScriptBlur(ctx))
+          .setBlurRadius(BLUR_RADIUS)
+          .setHasFixedTransformationMatrix(true)
+      }.toString())
 
       v.setOnClickListener {
         FullscreenWallpaperActivity.openWall(ctx, image, name, adapterPosition, ArrayList(data), animate)

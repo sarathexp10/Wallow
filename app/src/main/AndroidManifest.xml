@@ -19,7 +19,7 @@
       android:value="@string/admob_app_id"/>
 
     <provider
-      android:name="android.support.v4.content.FileProvider"
+      android:name="androidx.core.content.FileProvider"
       android:authorities="${applicationId}.fileprovider"
       android:grantUriPermissions="true"
       android:exported="false">
@@ -42,8 +42,7 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".activity.SettingsActivity"
-      android:theme="@style/PreferenceTheme">
+      android:name=".activity.SettingsActivity">
     </activity>
     <activity android:name=".activity.FullscreenWallpaperActivity">
     </activity>

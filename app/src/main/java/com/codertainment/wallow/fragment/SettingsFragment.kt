@@ -2,12 +2,12 @@ package com.codertainment.wallow.fragment
 
 import android.os.Bundle
 import android.os.Handler
-import android.support.v14.preference.SwitchPreference
-import android.support.v7.preference.DropDownPreference
-import android.support.v7.preference.Preference
+import androidx.preference.SwitchPreference
+import androidx.preference.DropDownPreference
+import androidx.preference.Preference
 import com.codertainment.wallow.R
-import com.takisoft.fix.support.v7.preference.ColorPickerPreference
-import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
+import com.takisoft.preferencex.ColorPickerPreference
+import com.takisoft.preferencex.PreferenceFragmentCompat
 import io.multimoon.colorful.Colorful
 import io.multimoon.colorful.ThemeColor
 
