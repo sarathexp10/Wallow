@@ -1,13 +1,11 @@
 package com.codertainment.wallow.activity
 
 import android.os.Bundle
-import android.os.Handler
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.StringRequestListener
-import com.codertainment.wallow.R
 import com.codertainment.wallow.getBoxStore
 import com.codertainment.wallow.getCategoryBox
 import com.codertainment.wallow.getWallpaperBox
@@ -15,14 +13,12 @@ import com.codertainment.wallow.model.Category
 import com.codertainment.wallow.model.Wallpaper
 import com.codertainment.wallow.util.ApiService
 import com.codertainment.wallow.util.UIUtils
-import com.mcxiaoke.koi.ext.delayed
 import com.mcxiaoke.koi.ext.isConnected
 import com.mcxiaoke.koi.ext.startActivity
 import com.mcxiaoke.koi.log.logd
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : AppCompatActivity() {
 
@@ -35,7 +31,6 @@ class SplashActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     UIUtils.setBarTranslucent(this, true, true)
-    setContentView(R.layout.activity_splash)
 
     if (isConnected()) {
       logd("Loading", "Started")
@@ -59,7 +54,6 @@ class SplashActivity : AppCompatActivity() {
           }
         )
     } else if (getCategoryBox().count() == 0L || getWallpaperBox().count() == 0L) {
-      splash_loader.smoothToHide()
       AlertDialog.Builder(this)
         .setTitle("Offline")
         .setMessage("An active internet connection is required for the first-time setup")
@@ -122,11 +116,8 @@ class SplashActivity : AppCompatActivity() {
       getWallpaperBox().removeAll()
       getWallpaperBox().put(wallpapers)
     }
-    splash_loader.smoothToHide()
-    Handler().delayed(500) {
-      startActivity<MainActivity>()
-      finish()
-    }
+    startActivity<MainActivity>()
+    finish()
   }
 
   private fun loadDir() {

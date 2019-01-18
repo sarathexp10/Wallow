@@ -74,31 +74,8 @@ class WallpaperAdapter(
       }
 
       if (!hideButtons) {
-        download.visibility = View.VISIBLE
         apply.visibility = View.VISIBLE
         share.visibility = View.VISIBLE
-
-        download.setOnClickListener {
-          download.startAnimation()
-          WallpaperUtil.download(ctx, item)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-              {
-                download.setProgress(it)
-              },
-              {
-                download.revertAnimation()
-                ctx.toast("Failed to download wallpaper")
-              },
-              {
-                download.revertAnimation {
-                  download.setImageResource(R.drawable.ic_done_white)
-                }
-                Snackbar.make(ctx.findViewById(R.id.main), "Wallpaper Downloaded to ${ctx.getString(R.string.app_name)}/Download", Snackbar.LENGTH_SHORT).show()
-              }
-            )
-        }
 
         apply.setOnClickListener {
           apply.startAnimation()
@@ -124,9 +101,31 @@ class WallpaperAdapter(
         apply.enableToolTip("Apply Wallpaper")
         share.enableToolTip("Share")
       } else {
-        download.visibility = View.GONE
         apply.visibility = View.GONE
         share.visibility = View.GONE
+      }
+
+
+      download.setOnClickListener {
+        download.startAnimation()
+        WallpaperUtil.download(ctx, item)
+          .subscribeOn(Schedulers.io())
+          .observeOn(AndroidSchedulers.mainThread())
+          .subscribe(
+            {
+              download.setProgress(it)
+            },
+            {
+              download.revertAnimation()
+              ctx.toast("Failed to download wallpaper")
+            },
+            {
+              download.revertAnimation {
+                download.setImageResource(R.drawable.ic_done_white)
+              }
+              Snackbar.make(ctx.findViewById(R.id.main), "Wallpaper Downloaded to ${ctx.getString(R.string.app_name)}/Download", Snackbar.LENGTH_SHORT).show()
+            }
+          )
       }
 
       logd("blur time $adapterPosition", measureTimeMillis {
